@@ -12,6 +12,7 @@ from tika import parser
 import string
 import csv
 
+nb=200
 
 def read_file_key_words_final(file_name):
     with open(file_name, 'r',encoding="utf8") as csvfile:
@@ -20,7 +21,7 @@ def read_file_key_words_final(file_name):
         for row in spamreader:
             keywords.append(row[1])
 
-        return keywords[2:100]
+        return keywords[2:]
 
 
 def read_file_key_words(file_name):
