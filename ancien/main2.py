@@ -6,7 +6,7 @@ from tika import parser
 
 import string
 
-filename= "../Buffer-in/00001-Stage - DÃ©veloppement d'une solution HomeNetWorking.pdf"
+filename= "../base_keywords/00001-Stage - DÃ©veloppement d'une solution HomeNetWorking.pdf"
 rawText = parser.from_file(filename)
 
 rawList = rawText['content'].splitlines()
@@ -24,5 +24,5 @@ keywords = [word for word in tokens if not word in stop_words and not word in pu
 
 print(keywords)
 
-with open('../keywords.csv', 'w') as f:
+with open('../output/keywords.csv', 'w') as f:
   f.write('\n'.join(keywords))

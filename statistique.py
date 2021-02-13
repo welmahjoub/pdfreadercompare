@@ -10,6 +10,17 @@ from nltk.corpus import stopwords
 from tika import parser
 
 import string
+import csv
+
+
+def read_file_key_words_final(file_name):
+    with open(file_name, 'r',encoding="utf8") as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',', quotechar='|')
+        keywords = []
+        for row in spamreader:
+            keywords.append(row[1])
+
+        return keywords[2:100]
 
 
 def read_file_key_words(file_name):
@@ -18,7 +29,7 @@ def read_file_key_words(file_name):
     return Lines
 
 
-def count_words(file_name):
+def count_words(file_name, file_name_df):
     words = read_file_key_words(file_name)
 
     text = ",".join(words)
@@ -26,10 +37,10 @@ def count_words(file_name):
     keywords = re.findall(r'[a-zA-Z]\w+', text)
     len(keywords)
 
-    write_dataframe(keywords, text)
+    write_dataframe(keywords, text, file_name_df)
 
 
-def write_dataframe(keywords, text):
+def write_dataframe(keywords, text, file_name_df):
     df = pd.DataFrame(list(set(keywords)), columns=['keywords'])
 
     df['number_of_times_word_appeared'] = df['keywords'].apply(lambda x: weightage(x, text)[0])
@@ -38,7 +49,7 @@ def write_dataframe(keywords, text):
     df['tf_idf'] = df['keywords'].apply(lambda x: weightage(x, text)[3])
 
     df = df.sort_values('idf', ascending=False)
-    df.to_csv('dataframe.csv')
+    df.to_csv(file_name_df)
     df.head(25)
     print(df)
 
@@ -50,4 +61,3 @@ def weightage(word, text, number_of_documents=10):
     idf = np.log(number_of_documents / float(number_of_times_word_appeared))
     tf_idf = tf * idf
     return number_of_times_word_appeared, tf, idf, tf_idf
-

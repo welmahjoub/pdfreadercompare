@@ -7,7 +7,7 @@ import string
 
 
 def write_keyword(keywords):
-    with open('../keywords.csv', 'a') as f:
+    with open('../output/keywords.csv', 'a') as f:
         f.write('\n'.join(keywords))
 
 

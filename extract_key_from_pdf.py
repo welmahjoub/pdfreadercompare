@@ -5,20 +5,20 @@ from tika import parser
 import string
 
 
-def extract_key_words(file_name,file_name_output):
-    text = read_pdf(file_name)
+def extract_key_words(text):
+
     tokens = word_tokenize(text)
     punctuations = punctuations_french()
     stop_words = stop_words_french()
 
     keywords = [word for word in tokens if word not in stop_words and word not in punctuations]
 
-    print(keywords)
+    # print(keywords)
     text2 = ",".join(keywords)
 
     keywords = re.findall(r'[a-zA-Z]\w+', text2)
-    len(keywords)
-    write_keyword(keywords, file_name_output)
+    keywords = [item.lower() for item in keywords]
+    return keywords
 
 
 def write_keyword(keywords, file_name_output):
@@ -28,11 +28,15 @@ def write_keyword(keywords, file_name_output):
 
 def read_pdf(file_name):
     rawText = parser.from_file(file_name)
-    rawList = rawText['content'].splitlines()
-    rawList = [text.lower() for text in rawList if len(text)]
-    text = ",".join(rawList)
+    # print(rawText)
+    if rawText['content'] :
+        rawList = rawText['content'].splitlines()
+        rawList = [text.lower() for text in rawList if len(text)]
+        text = ",".join(rawList)
 
-    return text
+        return text
+    else:
+        return []
 
 
 def stop_words_french():
